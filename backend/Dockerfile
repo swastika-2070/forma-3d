@@ -9,6 +9,8 @@ RUN npm ci
 COPY prisma ./prisma
 COPY prisma.config.ts ./
 
+ENV DATABASE_URL="postgresql://forma:forma@localhost:5432/forma"
+
 RUN npx prisma generate
 
 COPY tsconfig*.json ./
