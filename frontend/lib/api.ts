@@ -4,7 +4,7 @@ const API_URL =
       process.env.NEXT_PUBLIC_API_URL ||
       'http://backend:3001'
     : process.env.NEXT_PUBLIC_API_URL ||
-      'http://localhost:3001';
+      'https://forma-3d.onrender.com';
 
 export interface Product {
   id: number;
@@ -42,21 +42,14 @@ export async function getProducts(
 ): Promise<Product[]> {
   const params = new URLSearchParams();
 
-  if (search) {
-    params.set('search', search);
-  }
-
-  if (category) {
-    params.set('category', category);
-  }
+  if (search) params.set('search', search);
+  if (category) params.set('category', category);
 
   const query = params.toString();
 
   const response = await fetch(
     `${API_URL}/products${query ? `?${query}` : ''}`,
-    {
-      cache: 'no-store',
-    },
+    { cache: 'no-store' },
   );
 
   if (!response.ok) {
