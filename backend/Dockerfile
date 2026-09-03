@@ -7,9 +7,8 @@ COPY package*.json ./
 RUN npm ci
 
 COPY prisma ./prisma
-COPY prisma.config.ts ./
 
-ENV DATABASE_URL=postgresql://forma:forma@postgres:5432/forma
+COPY prisma.config.ts ./
 
 RUN npx prisma generate
 
@@ -21,4 +20,4 @@ RUN npm run build
 
 EXPOSE 3001
 
-CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
