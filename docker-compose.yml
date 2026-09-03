@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: forma-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: forma
+      POSTGRES_PASSWORD: forma
+      POSTGRES_DB: forma
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: forma-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://forma:forma@postgres:5432/forma
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: forma-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
